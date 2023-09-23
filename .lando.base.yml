@@ -149,7 +149,7 @@ events:
     - appserver: "cd $LANDO_WEBROOT && drush cache:rebuild -y && drush @local user:login"
 
 env_file:
-  - .lando/.env
+  - .lando/custom/.env
 
 # Tested with Lando version
 version: v3.11.0
