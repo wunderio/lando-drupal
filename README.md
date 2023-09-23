@@ -51,3 +51,6 @@ minimally the *name* parameter.
    In case you already had .lando.yml then remove anything that already exists in
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
+
+6. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
+   uncomment them.
