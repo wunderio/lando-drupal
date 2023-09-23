@@ -13,5 +13,11 @@
                 "package:wunderio/lando-drupal:.lando.base.yml"
             ]
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "echo test",
+            "mv -rf . ../../."
+        ]
     }
 }
