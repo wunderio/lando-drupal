@@ -23,7 +23,7 @@ minimally the *name* parameter.
 2. Then install the composer package as usual with:
 
    ```
-   composer wunderio/lando-drupal
+   composer require wunderio/lando-drupal --dev
    ```
 
 3. Add these into the main project's `.gitignore`:
