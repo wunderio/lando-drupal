@@ -28,7 +28,7 @@ minimally the *name* parameter.
 
 3. Add these into the main project's `.gitignore`:
    ```
-   # wunderio/lando-drupal:
+   # wunderio/lando-drupal
    .lando.base.yml
    .lando/core/
    ```
