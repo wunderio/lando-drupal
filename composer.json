@@ -3,21 +3,16 @@
     "description": "Wunder's extendable template for Lando Drupal projects.",
     "type": "project",
     "license": "GPL-2.0-or-later",
-    "homepage": "https://github.com/wunderio/lando",
+    "homepage": "https://github.com/wunderio/lando-drupal",
+    "authors": [
+        {
+            "name": "Hannes Kirsman",
+            "email": "hannes.kirsman@wunder.io",
+            "homepage": "https://github.com/hkirsman",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "koodimonni/composer-dropin-installer": "*"
-    },
-    "extra": {
-        "dropin-paths": {
-            "/": [
-                "package:wunderio/lando-drupal:.lando.base.yml"
-            ]
-        }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "echo test",
-            "mv -rf . ../../."
-        ]
     }
 }
