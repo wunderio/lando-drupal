@@ -7,18 +7,17 @@ minimally the *name* parameter.
 ## Installation
 
 1. Add this to your `composer.json`:
-
-```json
-{
-    "extra": {
-        "dropin-paths": {
-            "/": [
-                "package:wunderio/lando-drupal"
-            ]
-        }
-    }
-}
-```
+   ```json
+   {
+       "extra": {
+           "dropin-paths": {
+               "/": [
+                   "package:wunderio/lando-drupal"
+               ]
+           }
+       }
+   }
+   ```
 
 2. Then install the composer package as usual with:
 
