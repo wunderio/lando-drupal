@@ -5,5 +5,13 @@
     "license": "GPL-2.0-or-later",
     "homepage": "https://github.com/wunderio/lando",
     "require": {
+        "koodimonni/composer-dropin-installer": "*"
+    },
+    "extra": {
+        "dropin-paths": {
+            "/": [
+                "package:wunderio/lando-drupal:.lando.base.yml"
+            ]
+        }
     }
 }
