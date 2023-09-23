@@ -1,6 +1,6 @@
 {
-    "name": "wunderio/lando",
-    "description": "Wunder's extendable template for Lando projects.",
+    "name": "wunderio/lando-drupal",
+    "description": "Wunder's extendable template for Lando Drupal projects.",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "homepage": "https://github.com/wunderio/lando",
