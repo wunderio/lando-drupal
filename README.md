@@ -54,3 +54,77 @@ minimally the *name* parameter.
 
 6. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
    uncomment them.
+
+
+## Overview
+
+**Configuration Overview:**
+
+- **Name:** drupal-project
+- **Recipe:** drupal10
+
+**PHP and Web Server:**
+
+- **PHP Version:** 8.1
+- **Web Server:** Nginx
+- **Webroot:** web
+
+**Database:**
+
+- **Database Version:** MariaDB 10.3
+
+**Composer:**
+
+- **Composer Version:** 2
+
+**Xdebug:**
+
+- **Xdebug Mode:** Off (enabled by `lando xdebug` command)
+
+**Custom Configuration Files:**
+
+- Custom PHP configuration file: .lando/core/php.ini
+- Custom database configuration file: .lando/core/my.cnf
+
+**Tooling Commands:**
+
+- **composer:** Runs Composer commands.
+- **grumphp:** Runs GrumPHP commands.
+- **npm:** Runs npm commands.
+- **phpunit:** Runs PHPUnit commands with custom options.
+- **regenerate-phpunit-config:** Regenerates fresh PHPUnit configuration.
+- **varnishadm:** Runs varnishadm commands.
+- **xdebug:** Loads Xdebug in the selected mode.
+
+**Services:**
+
+- **appserver:** Configuration for the primary application server.
+- - Sets the timezone to "Europe/Helsinki."
+- - Defines environment variables including HASH_SALT, ENVIRONMENT_NAME, DB_NAME_DRUPAL, DB_USER_DRUPAL, DB_PASS_DRUPAL, DB_HOST_DRUPAL, DRUSH_OPTIONS_URI, VARNISH_ADMIN_HOST, XDEBUG_MODE, and PHP_IDE_CONFIG.
+- - Provides PHPUnit settings for headless Chrome.
+- **chrome:** Configuration for running Chrome WebDriver.
+- **mailhog:** Configuration for MailHog, a mail testing tool.
+- **node:** Configuration for Node.js 16, with npm installation.
+- **proxy:** Configuration for proxy settings.
+
+**Custom Events:**
+
+- **post-db-import:** Custom event to rebuild Drupal cache and log in the local user after a database import.
+
+**Environment File:**
+
+- Uses an environment file located at .lando/contrib/.env.
+
+**Lando Version:**
+
+- Tested with Lando version v3.18.0.
+
+**Notes:**
+
+- This Lando configuration is designed for a Drupal 10 project.
+- It includes custom PHP and database configuration files.
+- Tooling commands are provided for Composer, GrumPHP, npm, PHPUnit, Varnishadm, and Xdebug.
+- Services are configured for the primary application server, Chrome WebDriver, MailHog, and Node.js.
+- Custom events are defined to perform actions after a database import.
+- The configuration is tested with Lando version 3.18.0.
+- Please make sure to adjust any paths or configurations as needed for your specific project and environment.
