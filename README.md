@@ -115,6 +115,12 @@ Currently, there are 3 scripts:
 - **node:** Configuration for Node.js 16, with npm installation.
 - **proxy:** Configuration for proxy settings.
 
+Service commands that are defined as scripts (.lando/core/services-*.sh files) can be overwritten
+by adding them in .lando/custom/ folder with the same name.
+Currently, there is 1 script:
+
+- .lando/core/services-appserver-build.sh
+
 **Custom Events:**
 
 - **post-db-import:** Custom event to rebuild Drupal cache and log in the local user after a database import.
