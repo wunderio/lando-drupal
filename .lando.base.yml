@@ -28,11 +28,11 @@ tooling:
     description: "Runs PHPUnit commands"
     user: www-data
     cmd:
-      - appserver: "php /app/vendor/bin/phpunit -c /app/phpunit.xml --testdox"
+      - appserver: "/app/.lando/core/run-scripts.sh tooling-phpunit.sh"
   regenerate-phpunit-config:
     description: "Regenerates fresh PHPUnit configuration."
     cmd:
-      - appserver: /app/.lando/core/phpunit.sh
+      - appserver: "/app/.lando/core/run-scripts.sh tooling-regenerate-phpunit-config.sh"
   varnishadm:
     description: "Runs varnishadm commands"
     service: varnish
@@ -40,7 +40,7 @@ tooling:
   xdebug:
     description: "Loads Xdebug in the selected mode"
     cmd:
-      - appserver: /app/.lando/core/xdebug.sh
+      - appserver: "/app/.lando/core/run-scripts.sh tooling-xdebug.sh"
     user: root
 
 services:
