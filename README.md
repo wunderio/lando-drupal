@@ -96,6 +96,14 @@ minimally the *name* parameter.
 - **varnishadm:** Runs varnishadm commands.
 - **xdebug:** Loads Xdebug in the selected mode.
 
+Tooling commands that are defined as scripts (.lando/core/tooling-*.sh files) can be overwritten
+by adding them in .lando/custom/ folder with the same name.
+Currently, there are 3 scripts:
+
+ - .lando/core/tooling-phpunit.sh
+ - .lando/core/tooling-regenerate-phpunit-config.sh
+ - .lando/core/tooling-xdebug.sh
+
 **Services:**
 
 - **appserver:** Configuration for the primary application server.
