@@ -13,6 +13,7 @@
         }
     ],
     "require": {
+        "drupal/core": "^10",
         "koodimonni/composer-dropin-installer": "*"
     }
 }
