@@ -43,8 +43,6 @@ minimally the *name* parameter.
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
    name: your-project-name
-
-   # Optional to make sure upstream does not change this eg to drupal11 at some point.
    recipe: drupal10
    ```
 
