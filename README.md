@@ -108,6 +108,7 @@ Currently, there are 3 scripts:
 - - Sets the timezone to "Europe/Helsinki."
 - - Defines environment variables including HASH_SALT, ENVIRONMENT_NAME, DB_NAME_DRUPAL, DB_USER_DRUPAL, DB_PASS_DRUPAL, DB_HOST_DRUPAL, DRUSH_OPTIONS_URI, VARNISH_ADMIN_HOST, XDEBUG_MODE, and PHP_IDE_CONFIG.
 - - Provides PHPUnit settings for headless Chrome.
+- **adminer:** [Adminer database management tool](https://github.com/dehy/docker-adminer).
 - **chrome:** Configuration for running Chrome WebDriver.
 - **mailhog:** Configuration for MailHog, a mail testing tool.
 - **node:** Configuration for Node.js 16, with npm installation.
@@ -115,8 +116,9 @@ Currently, there are 3 scripts:
 
 Service commands that are defined as scripts (.lando/core/services-*.sh files) can be overwritten
 by adding them in .lando/custom/ folder with the same name.
-Currently, there is 1 script:
+Currently, there are 2 script:
 
+- .lando/core/services-adminer-run-as-root.sh
 - .lando/core/services-appserver-build.sh
 
 **Custom Events:**
