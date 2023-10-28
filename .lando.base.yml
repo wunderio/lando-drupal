@@ -44,7 +44,7 @@ tooling:
 
 services:
   adminer:
-    type: lando
+    type: compose
     services:
       image: dehy/adminer
       command: /bin/s6-svscan /etc/services.d
