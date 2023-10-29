@@ -153,6 +153,7 @@ events:
 
 env_file:
   - .lando/core/.env
+  - .lando/custom/.env
 
 # Tested with Lando version
 version: v3.18.0
