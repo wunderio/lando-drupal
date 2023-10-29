@@ -31,14 +31,15 @@ minimally the *name* parameter.
    .lando.base.yml
    .lando/core/
    ```
+4. Move your current .lando/* files to .lando/custom/
 
-4. Add changes to GIT:
+5. Add changes to GIT:
    ```
    git add .lando/custom/ &&
    git add -p .gitignore composer.json composer.lock
    ```
 
-5. Depending on your project either create or update your .lando.yml.
+6. Depending on your project either create or update your .lando.yml.
 
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
@@ -50,7 +51,7 @@ minimally the *name* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-6. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
+7. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
    uncomment them.
 
 
