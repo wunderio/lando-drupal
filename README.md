@@ -6,40 +6,27 @@ minimally the *name* parameter.
 
 ## Installation
 
-1. Add this to your `composer.json`:
-   ```json
-   {
-       "extra": {
-           "dropin-paths": {
-               "/": [
-                   "package:wunderio/lando-drupal"
-               ]
-           }
-       }
-   }
-   ```
-
-2. Then install the composer package as usual with:
+1. Install the composer package:
 
    ```
    composer require wunderio/lando-drupal --dev
    ```
 
-3. Add these into the main project's `.gitignore`:
+2. Add these into the main project's `.gitignore`:
    ```
    # wunderio/lando-drupal
    .lando.base.yml
    .lando/core/
    ```
-4. Move your current .lando/* files to .lando/custom/
+3. Move your current .lando/* files to .lando/custom/
 
-5. Add changes to GIT:
+4. Add changes to GIT:
    ```
    git add .lando/custom/ &&
    git add -p .gitignore composer.json composer.lock
    ```
 
-6. Depending on your project either create or update your .lando.yml.
+5. Depending on your project either create or update your .lando.yml.
 
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
@@ -51,7 +38,7 @@ minimally the *name* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-7. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
+6. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
    uncomment them.
 
 
