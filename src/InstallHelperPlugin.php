@@ -112,6 +112,8 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
     }
 
     self::deployLandoFiles();
+
+    shell_exec('bash vendor/wunderio/lando-drupal/scripts/load_extensions.sh');
   }
 
   /**
