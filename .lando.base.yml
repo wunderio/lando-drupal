@@ -38,6 +38,10 @@ tooling:
     cmd:
       - appserver: "/app/.lando/core/_run-scripts.sh tooling-xdebug.sh"
     user: root
+  load-wunderio-lando-drupal-extensions:
+    description: "After adding new extensions under wunderio:extensions: in your .lando.yml this is needed to ensure new .lando.base.yml is built. Otherwise you'd need to run rebuild 2 times."
+    cmd:
+      - appserver: "/app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh"
 
 services:
   adminer:
@@ -144,7 +148,7 @@ events:
   post-db-import:
     - appserver: "cd $LANDO_WEBROOT && drush cache:rebuild -y && drush @local user:login"
   pre-rebuild:
-    - appserver: /app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh
+    - appserver: "/app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh"
 
 env_file:
   - .lando/core/.env
