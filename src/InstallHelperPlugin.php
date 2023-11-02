@@ -176,7 +176,12 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
     $i = new \DirectoryIterator($src);
     foreach ($i as $f) {
       if ($f->isFile()) {
+        umask(0);
         copy($f->getRealPath(), "$dest/" . $f->getFilename());
+        // Add execute permission to script file.
+        if (pathinfo($f->getFilename(), PATHINFO_EXTENSION) === 'sh') {
+          chmod("$dest/" . $f->getFilename(), 0755);
+        }
       }
       elseif (!$f->isDot() && $f->isDir()) {
         self::rcopy($f->getRealPath(), "$dest/$f");
