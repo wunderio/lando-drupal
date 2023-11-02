@@ -76,7 +76,6 @@ minimally the *name* parameter.
 
 - **composer:** Runs Composer commands.
 - **grumphp:** Runs GrumPHP commands.
-- **npm:** Runs npm commands.
 - **phpunit:** Runs PHPUnit commands with custom options.
 - **regenerate-phpunit-config:** Regenerates fresh PHPUnit configuration.
 - **varnishadm:** Runs varnishadm commands.
@@ -99,7 +98,6 @@ Currently, there are 3 scripts:
 - **adminer:** [Adminer database management tool](https://github.com/dehy/docker-adminer).
 - **chrome:** Configuration for running Chrome WebDriver.
 - **mailhog:** Configuration for MailHog, a mail testing tool.
-- **node:** Configuration for Node.js 16, with npm installation.
 - **proxy:** Configuration for proxy settings.
 
 Service commands that are defined as scripts (.lando/core/services-*.sh files) can be overwritten
@@ -125,8 +123,8 @@ Currently, there are 2 script:
 
 - This Lando configuration is designed for a Drupal 10 project.
 - It includes custom PHP and database configuration files.
-- Tooling commands are provided for Composer, GrumPHP, npm, PHPUnit, Varnishadm, and Xdebug.
-- Services are configured for the primary application server, Chrome WebDriver, MailHog, and Node.js.
+- Tooling commands are provided for Composer, GrumPHP, PHPUnit, Varnishadm, and Xdebug.
+- Services are configured for the primary application server, Chrome WebDriver and MailHog.
 - Custom events are defined to perform actions after a database import.
 - The configuration is tested with Lando version 3.18.0.
 - Please make sure to adjust any paths or configurations as needed for your specific project and environment.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Helper script to load custom extensions from .lando.yml
+# Helper script to load custom extensions from extensions folder.
 #
 # This is not native Lando feature. It is a workaround to load extensions because we
 # only have one .lando.base.yml and we want to be able to keep it minimal and then
@@ -71,7 +71,7 @@ for extension in "${extensions[@]}"; do
   extension_dir="vendor/wunderio/lando-drupal/extensions/$extension"
   extension_path="$extension_dir/.lando.yml"
 
-  # Check if the extension_path exists before merging
+  # Check if the extension_path exists before merging.
   if [ -f "$extension_path" ]; then
     # Use yq to merge the extension-specific .lando.yml into .lando.base.yml
     yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' .lando.base.yml "$extension_path" > .lando.base.tmp.yml

@@ -143,6 +143,8 @@ proxy:
 events:
   post-db-import:
     - appserver: "cd $LANDO_WEBROOT && drush cache:rebuild -y && drush @local user:login"
+  pre-rebuild:
+    - appserver: /app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh
 
 env_file:
   - .lando/core/.env
