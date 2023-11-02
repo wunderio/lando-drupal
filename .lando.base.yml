@@ -20,9 +20,6 @@ tooling:
     description: "Runs grumphp commands"
     cmd:
       - appserver: ./vendor/bin/grumphp
-  npm:
-    description: "Runs npm commands"
-    service: node
   phpunit:
     description: "Runs PHPUnit commands"
     user: www-data
@@ -119,10 +116,6 @@ services:
     type: mailhog
     hogfrom:
       - appserver
-  node:
-    type: "node:16"
-    build:
-      - "npm install"
   # varnish:
   #   type: "varnish:6"
   #   backends:

@@ -1,0 +1,10 @@
+tooling:
+  npm:
+    description: "Runs npm commands"
+    service: node
+
+services:
+  node:
+    type: "node:16"
+    build:
+      - "npm install"
