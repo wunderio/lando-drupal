@@ -155,8 +155,6 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
    *   TRUE if recursive copy was successful, FALSE otherwise.
    */
   private static function rcopy($src, $dest): bool {
-    echo "rcopy: Copying $src to $dest\n";
-
     // If source is not a directory stop processing.
     if (!is_dir($src)) {
       echo "Source is not a directory";
