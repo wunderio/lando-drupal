@@ -103,7 +103,14 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
   public function onWunderIoLandoDrupalPackageInstall(PackageEvent $event) {
     /** @var \Composer\DependencyResolver\Operation\InstallOperation $operation */
     $operation = $event->getOperation();
-    $current_package = $operation->getPackage();
+
+    // Composer operations have access to packages, just through different
+    // methods, which depend on whether the operation is an InstallOperation or
+    // an UpdateOperation
+    $current_package = method_exists($operation, 'getPackage')
+      ? $operation->getPackage()
+      : $operation->getInitialPackage();
+
     $current_package_name = $current_package->getName();
 
     // We only want to continue for this package.
