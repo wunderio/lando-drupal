@@ -13,10 +13,11 @@ log_message() {
   echo "wunderio/lando-drupal: $1"
 }
 
-# Check if yq is installed
+# Install yq tool to be able to merge yaml files.
+# Installation is done in ~/bin directory as we don't have root access.
 install_yq() {
-  # Define the desired version of yq
-  YQ_VERSION="4.13.3"
+  # Define the desired version of yq.
+  YQ_VERSION="4.35.2"
 
   # Check if the `yq` binary already exists.
   if [ -f ~/bin/yq ]; then
@@ -29,7 +30,7 @@ install_yq() {
   # Check if the ~/bin directory exists, and if not, create it.
   [ -d ~/bin ] || mkdir -p ~/bin
 
-  # Download yq binary
+  # Download yq binary.
   wget -q "$YQ_URL" -O ~/bin/yq
   chmod +x ~/bin/yq
 
@@ -54,7 +55,7 @@ if [ -n "$LANDO" ]; then
     ~/bin/yq "$@"
   }
 else
-  # Function to run yq using the docker container.
+  # Function to run yq using the docker container in host.
   yq() {
     docker run --rm -v "$(pwd)":/workdir mikefarah/yq "$@"
   }
