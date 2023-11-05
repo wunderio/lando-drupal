@@ -13,15 +13,15 @@ script_name="$1"
 custom_script="/app/.lando/custom/$script_name"
 core_script="/app/.lando/core/$script_name"
 
-# Check if the custom script exists, and if so, run it.
-if [ -f "$custom_script" ]; then
+# Check if the custom script exists and is executable
+if [ -x "$custom_script" ]; then
     echo "Running custom script: $custom_script"
-    sh "$custom_script"
-elif [ -f "$core_script" ]; then
+    "$custom_script"
+elif [ -x "$core_script" ]; then
     # If the custom script doesn't exist, run the core script.
     echo "Running core script: $core_script"
-    sh "$core_script"
+    "$core_script"
 else
-    echo "Script not found: $script_name"
+    echo "Script not found or not executable: $script_name"
     exit 1
 fi
