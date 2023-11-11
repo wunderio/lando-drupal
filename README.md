@@ -6,40 +6,27 @@ minimally the *name* parameter.
 
 ## Installation
 
-1. Add this to your `composer.json`:
-   ```json
-   {
-       "extra": {
-           "dropin-paths": {
-               "/": [
-                   "package:wunderio/lando-drupal"
-               ]
-           }
-       }
-   }
-   ```
-
-2. Then install the composer package as usual with:
+1. Install the composer package:
 
    ```
    composer require wunderio/lando-drupal --dev
    ```
 
-3. Add these into the main project's `.gitignore`:
+2. Add these into the main project's `.gitignore`:
    ```
    # wunderio/lando-drupal
    .lando.base.yml
    .lando/core/
    ```
-4. Move your current .lando/* files to .lando/custom/
+3. Move your current .lando/* files to .lando/custom/
 
-5. Add changes to GIT:
+4. Add changes to GIT:
    ```
    git add .lando/custom/ &&
    git add -p .gitignore composer.json composer.lock
    ```
 
-6. Depending on your project either create or update your .lando.yml.
+5. Depending on your project either create or update your .lando.yml.
 
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
@@ -51,9 +38,13 @@ minimally the *name* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-7. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
-   uncomment them.
+6. Optionally enable custom extensions eg node and then rebuild Lando:
+   ```
+   lando load-wunderio-lando-drupal-extensions node
+   lando rebuild
+   ```
 
+   All available extensions are listed at https://github.com/wunderio/lando-drupal/tree/main/extensions
 
 ## Overview
 
@@ -89,7 +80,6 @@ minimally the *name* parameter.
 
 - **composer:** Runs Composer commands.
 - **grumphp:** Runs GrumPHP commands.
-- **npm:** Runs npm commands.
 - **phpunit:** Runs PHPUnit commands with custom options.
 - **regenerate-phpunit-config:** Regenerates fresh PHPUnit configuration.
 - **varnishadm:** Runs varnishadm commands.
@@ -112,7 +102,6 @@ Currently, there are 3 scripts:
 - **adminer:** [Adminer database management tool](https://github.com/dehy/docker-adminer).
 - **chrome:** Configuration for running Chrome WebDriver.
 - **mailhog:** Configuration for MailHog, a mail testing tool.
-- **node:** Configuration for Node.js 16, with npm installation.
 - **proxy:** Configuration for proxy settings.
 
 Service commands that are defined as scripts (.lando/core/services-*.sh files) can be overwritten
@@ -138,8 +127,8 @@ Currently, there are 2 script:
 
 - This Lando configuration is designed for a Drupal 10 project.
 - It includes custom PHP and database configuration files.
-- Tooling commands are provided for Composer, GrumPHP, npm, PHPUnit, Varnishadm, and Xdebug.
-- Services are configured for the primary application server, Chrome WebDriver, MailHog, and Node.js.
+- Tooling commands are provided for Composer, GrumPHP, PHPUnit, Varnishadm, and Xdebug.
+- Services are configured for the primary application server, Chrome WebDriver and MailHog.
 - Custom events are defined to perform actions after a database import.
 - The configuration is tested with Lando version 3.18.0.
 - Please make sure to adjust any paths or configurations as needed for your specific project and environment.

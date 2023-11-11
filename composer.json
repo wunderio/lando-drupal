@@ -1,7 +1,7 @@
 {
     "name": "wunderio/lando-drupal",
     "description": "Wunder's extendable template for Lando Drupal projects.",
-    "type": "project",
+    "type": "composer-plugin",
     "license": "GPL-2.0-or-later",
     "homepage": "https://github.com/wunderio/lando-drupal",
     "authors": [
@@ -14,6 +14,17 @@
     ],
     "require": {
         "drupal/core": "^10",
-        "koodimonni/composer-dropin-installer": "*"
+        "composer-plugin-api": "^2.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wunderio\\LandoDrupal\\Composer\\": "src/"
+        }
+    },
+    "extra": {
+        "class": "Wunderio\\LandoDrupal\\Composer\\InstallHelperPlugin"
     }
 }
