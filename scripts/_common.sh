@@ -4,7 +4,10 @@
 # This file contains common functions used by other scripts.
 #
 
-# Help to print messages to the user.
+# Helper to print log messages to the user.
+#
+# Parameters:
+#   $1: message - The message to be logged.
 log_message() {
   echo "wunderio/lando-drupal: $1"
 }

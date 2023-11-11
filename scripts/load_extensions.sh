@@ -15,7 +15,10 @@ source vendor/wunderio/lando-drupal/scripts/_common.sh
 setup_yq
 
 # Helper to write extension to .lando.yml.
-add_extension() {
+#
+# Parameters:
+#   $1: extensions - A comma-separated string of extension names eg node.
+add_extension_to_lando_yml() {
   extensions="$1"  # Extensions are provided as a comma-separated string.
   IFS=',' read -ra extension_array <<< "$extensions"  # Split the string into an array.
 
@@ -45,7 +48,7 @@ add_extension() {
 if [ -n "$1" ]; then
   # Add the extension to .lando.yml.
   extension_name="$1"
-  add_extension "$extension_name"
+  add_extension_to_lando_yml "$extension_name"
 fi
 
 # Use yq to extract the extension values from .lando.yml and store them in an array.
