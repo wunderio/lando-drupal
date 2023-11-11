@@ -61,3 +61,37 @@ setup_yq() {
     }
   fi
 }
+
+# Install enabled extensions
+#
+# This function reads the list of enabled extensions from .lando.yml,
+# iterates through them, and merges their respective .lando.yml
+# configuration files into the main .lando.base.yml, effectively
+# installing and enabling these extensions for the project.
+# Each extension is expected to have its configuration in the
+# 'vendor/wunderio/lando-drupal/extensions' directory.
+#
+# This function uses the yq tool to perform YAML manipulation and
+# logs the installation process using log_message.
+install_enabled_extensions() {
+  # Use yq to extract the extension values from .lando.yml and store them in an array.
+  extensions=($(yq eval '.wunderio.extensions[]' .lando.yml))
+
+  # Iterate over the array of extensions and merge them to project.
+  for extension in "${extensions[@]}"; do
+    log_message "Preparing to install extension: $extension"
+    # Build the path to the extension-specific .lando.yml file
+    extension_dir="vendor/wunderio/lando-drupal/extensions/$extension"
+    extension_path="$extension_dir/.lando.yml"
+
+    # Check if the extension_path exists before merging.
+    if [ -f "$extension_path" ]; then
+      # Use yq to merge the extension-specific .lando.yml into .lando.base.yml
+      yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' .lando.base.yml "$extension_path" > .lando.base.tmp.yml
+      mv .lando.base.tmp.yml .lando.base.yml
+      log_message "Successfully installed $extension extension."
+    else
+      echo "$extension_dir extension does not exist."
+    fi
+  done
+}

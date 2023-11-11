@@ -14,11 +14,20 @@ source vendor/wunderio/lando-drupal/scripts/_common.sh
 
 setup_yq
 
-# Helper to write extension to .lando.yml.
+# Helper to enable extension in .lando.yml which does not install it yet.
+#
+# This will add the needed configuration in .lando.yml to install
+# extension eg in case of node it would write:
+# wunderio:
+#  extensions:
+#    - node
+#
+# Another function - install_enabled_extensions() - will update .lando.base.yml and
+# merge in the needed code.
 #
 # Parameters:
 #   $1: extensions - A comma-separated string of extension names eg node.
-add_extension_to_lando_yml() {
+enable_extension() {
   extensions="$1"  # Extensions are provided as a comma-separated string.
   IFS=',' read -ra extension_array <<< "$extensions"  # Split the string into an array.
 
@@ -48,29 +57,10 @@ add_extension_to_lando_yml() {
 if [ -n "$1" ]; then
   # Add the extension to .lando.yml.
   extension_name="$1"
-  add_extension_to_lando_yml "$extension_name"
+  enable_extension "$extension_name"
 fi
 
-# Use yq to extract the extension values from .lando.yml and store them in an array.
-extensions=($(yq eval '.wunderio.extensions[]' .lando.yml))
-
-# Iterate over the array of extensions and merge them to project.
-for extension in "${extensions[@]}"; do
-  log_message "Preparing to install extension: $extension"
-  # Build the path to the extension-specific .lando.yml file
-  extension_dir="vendor/wunderio/lando-drupal/extensions/$extension"
-  extension_path="$extension_dir/.lando.yml"
-
-  # Check if the extension_path exists before merging.
-  if [ -f "$extension_path" ]; then
-    # Use yq to merge the extension-specific .lando.yml into .lando.base.yml
-    yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' .lando.base.yml "$extension_path" > .lando.base.tmp.yml
-    mv .lando.base.tmp.yml .lando.base.yml
-    log_message "Successfully installed $extension extension."
-  else
-    echo "$extension_dir extension does not exist."
-  fi
-done
+install_enabled_extensions
 
 # Print out help message to user to suggest rebuilding Lando now.
 if [ -n "$1" ]; then
