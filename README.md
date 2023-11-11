@@ -38,9 +38,13 @@ minimally the *name* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-6. Optionally enable disabled services in .lando.base.yml by copying these over to .lando.yml and
-   uncomment them.
+6. Optionally enable custom extensions eg node and then rebuild Lando:
+   ```
+   lando load-wunderio-lando-drupal-extensions node
+   lando rebuild
+   ```
 
+   All available extensions are listed at https://github.com/wunderio/lando-drupal/tree/main/extensions
 
 ## Overview
 
