@@ -47,9 +47,9 @@ disable_extension() {
   done
 }
 
-# Update .lando.yml and add the extension if it was passed as an argument.
+# Update .lando.yml and remove the extension if it was passed as an argument.
 if [ -n "$1" ]; then
-  # Remove the extension to .lando.yml.
+  # Remove the extension from .lando.yml.
   extension_name="$1"
   disable_extension "$extension_name"
 fi
