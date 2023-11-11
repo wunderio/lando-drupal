@@ -12,7 +12,7 @@ cd /app
 
 source vendor/wunderio/lando-drupal/scripts/_common.sh
 
-install_yq
+setup_yq
 
 # Helper to write extension to .lando.yml.
 add_extension() {
