@@ -39,9 +39,13 @@ tooling:
       - appserver: "/app/.lando/core/_run-scripts.sh tooling-xdebug.sh"
     user: root
   load-wunderio-lando-drupal-extensions:
-    description: "After adding new extensions under wunderio:extensions: in your .lando.yml this is needed to ensure new .lando.base.yml is built. Otherwise you'd need to run rebuild 2 times."
+    description: "Helper to add extension under wunderio:extensions: in your .lando.yml. You need 'lando rebuild' for the changes to take affect."
     cmd:
       - appserver: "/app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh"
+  unload-wunderio-lando-drupal-extensions:
+    description: "Helper to remove extension under wunderio:extensions: in your .lando.yml. You need 'lando rebuild' for the changes to take affect."
+    cmd:
+      - appserver: "/app/vendor/wunderio/lando-drupal/scripts/unload_extensions.sh"
 
 services:
   adminer:
