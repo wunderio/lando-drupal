@@ -106,7 +106,7 @@ install_enabled_extensions() {
       mv .lando.base.tmp.yml .lando.base.yml
       log_message "Successfully installed $extension extension."
     else
-      echo "$extension_dir extension does not exist."
+      log_message "$extension_dir extension does not exist."
     fi
   done
 }

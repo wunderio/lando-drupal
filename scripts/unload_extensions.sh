@@ -59,5 +59,5 @@ install_enabled_extensions
 # Print out help message to user to suggest rebuilding Lando now.
 if [ -n "$1" ]; then
   echo
-  echo "Run 'lando rebuild' to apply the changes."
+  log_message "Run 'lando rebuild' to apply the changes."
 fi
