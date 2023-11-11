@@ -83,8 +83,14 @@ install_enabled_extensions() {
   # extensions, then we've also implemented removal of extensions at
   # the same time.
   LANDO_DRUPAL_PACKAGE_VERSION=$(composer show | grep -oP 'wunderio/lando-drupal\s+\K\S+')
-  BASE_YML_URL="https://raw.githubusercontent.com/wunderio/lando-drupal/${LANDO_DRUPAL_PACKAGE_VERSION}/.lando.base.yml"
-  wget -q -O .lando.base.yml $BASE_YML_URL
+
+  # Check if the version is a valid version number
+  if [[ "$LANDO_DRUPAL_PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    BASE_YML_URL="https://raw.githubusercontent.com/wunderio/lando-drupal/${LANDO_DRUPAL_PACKAGE_VERSION}/.lando.base.yml"
+    wget -q -O .lando.base.yml "$BASE_YML_URL"
+  else
+    log_message "Invalid version: $LANDO_DRUPAL_PACKAGE_VERSION. Skipping download of .lando.base.yml."
+  fi
 
   # Check if the extensions array is empty.
   if [ ${#extensions[@]} -eq 0 ]; then
