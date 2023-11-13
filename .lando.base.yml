@@ -85,14 +85,6 @@ services:
   # @see: https://docs.lando.dev/guides/external-access.html
   # database:
   #   portforward: 34567
-  # kibana:
-  #   type: compose
-  #   services:
-  #     image: "docker.elastic.co/kibana/kibana:7.17.0"
-  #     command: "/bin/tini -- /usr/local/bin/kibana-docker"
-  #     user: kibana
-  #     ports:
-  #       - "5601:5601"
   mailhog:
     type: mailhog
     hogfrom:
@@ -114,8 +106,6 @@ proxy:
     - adminer.drupal-project.lndo.site
   mailhog:
     - mail.lndo.site
-  # kibana:
-  #   - kibana.lndo.site:5601
   # varnish:
   #   - varnish.drupal-project.lndo.site
 
