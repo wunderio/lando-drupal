@@ -23,6 +23,7 @@ minimally the *name* parameter.
 4. Add changes to GIT:
    ```
    git add .lando/custom/ &&
+   git add drush/sites/ &&
    git add -p .gitignore composer.json composer.lock
    ```
 
