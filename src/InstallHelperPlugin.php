@@ -148,8 +148,9 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
     self::copy($src_base, $this->projectDir);
 
     // Copy over the Drush aliases file.
-    $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/drush/sites/local.site.yml';
-    self::copy($src_base, "$this->projectDir}/drush/sites");
+    $src_drush_aliases = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/drush/sites';
+    $dest_drush_aliases = "{$this->projectDir}/drush/sites";
+    self::rcopy($src_drush_aliases, $dest_drush_aliases);
   }
 
   /**
