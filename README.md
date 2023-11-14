@@ -2,7 +2,7 @@
 
 This is a template for Lando Drupal projects for defining the base Lando setup for Drupal.
 It creates .lando.base.yml file and .lando/core/ folder. You still need .lando.yml to define
-minimally the *name* parameter.
+minimally the *name* and *recipe* parameter.
 
 ## Installation
 
