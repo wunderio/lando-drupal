@@ -146,6 +146,11 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
     // Copy over the .lando.base.yml file.
     $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando.base.yml';
     self::copy($src_base, $this->projectDir);
+
+    // Copy over the Drush aliases file.
+    $src_drush_aliases = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/drush/sites';
+    $dest_drush_aliases = "{$this->projectDir}/drush/sites";
+    self::rcopy($src_drush_aliases, $dest_drush_aliases);
   }
 
   /**
