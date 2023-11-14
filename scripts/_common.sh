@@ -77,14 +77,19 @@ install_enabled_extensions() {
   # Use yq to extract the extension values from .lando.yml and store them in an array.
   extensions=($(yq eval '.wunderio.extensions[]' .lando.yml))
 
-  # Always fetch the clean .lando.base.yml from Github before doing
-  # any changes to it. We might not even have vendor folder available
-  # to reset it from there. If we always start from fresh and re-add
-  # extensions, then we've also implemented removal of extensions at
-  # the same time.
-  LANDO_DRUPAL_PACKAGE_VERSION=$(composer show | grep -oP 'wunderio/lando-drupal\s+\K\S+')
-  BASE_YML_URL="https://raw.githubusercontent.com/wunderio/lando-drupal/${LANDO_DRUPAL_PACKAGE_VERSION}/.lando.base.yml"
-  wget -q -O .lando.base.yml $BASE_YML_URL
+  # Reset the .lando.base.yml file to the original state before merging extensions.
+  if [ -f "vendor/wunderio/lando-drupal/.lando.base.yml" ]; then
+    cp vendor/wunderio/lando-drupal/.lando.base.yml .lando.base.yml
+  else
+    # If the local file doesn't exist, download from GitHub
+    LANDO_DRUPAL_PACKAGE_VERSION=$(composer show | grep -oP 'wunderio/lando-drupal\s+\K\S+')
+
+    # Check if the version is a valid version number
+    if [[ "$LANDO_DRUPAL_PACKAGE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+      BASE_YML_URL="https://raw.githubusercontent.com/wunderio/lando-drupal/${LANDO_DRUPAL_PACKAGE_VERSION}/.lando.base.yml"
+      wget -q -O .lando.base.yml "$BASE_YML_URL"
+    fi
+  fi
 
   # Check if the extensions array is empty.
   if [ ${#extensions[@]} -eq 0 ]; then

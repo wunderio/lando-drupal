@@ -1,0 +1,32 @@
+services:
+  elasticsearch:
+    type: compose
+    services:
+      image: "docker.elastic.co/elasticsearch/elasticsearch:8.11.0"
+      command: "/bin/tini -- /usr/local/bin/docker-entrypoint.sh eswrapper"
+      user: elasticsearch
+      environment:
+        ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+        discovery.type: "single-node"
+        bootstrap.memory_lock: "true"
+        # Allow CORS requests.
+        http.cors.enabled: "true"
+        http.cors.allow-origin: "*"
+      ulimits:
+        memlock:
+          soft: "-1"
+          hard: "-1"
+      ports:
+        - "9200:9200"
+      volumes:
+        - esdata:/usr/share/elasticsearch/data
+    # Install ES plugins.
+    build_as_root:
+      - elasticsearch-plugin install analysis-icu analysis-ukrainian
+    volumes:
+      esdata:
+        driver: local
+
+proxy:
+  elasticsearch:
+    - elasticsearch.lndo.site:9200
