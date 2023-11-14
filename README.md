@@ -6,28 +6,29 @@ minimally the *name* parameter.
 
 ## Installation
 
-1. Install the composer package:
+1. Move your current .lando/* files to .lando/custom/. Next step will add new .lando/core/ folder.
+
+3. Install the composer package:
 
    ```
    composer require wunderio/lando-drupal --dev
    ```
 
-2. Add these into the main project's `.gitignore`:
+4. Add these into the main project's `.gitignore`:
    ```
    # wunderio/lando-drupal
    .lando.base.yml
    .lando/core/
    ```
-3. Move your current .lando/* files to .lando/custom/
 
-4. Add changes to GIT:
+5. Add changes to GIT:
    ```
    git add .lando/custom/ &&
    git add drush/sites/ &&
    git add -p .gitignore composer.json composer.lock
    ```
 
-5. Depending on your project either create or update your .lando.yml.
+6. Depending on your project either create or update your .lando.yml.
 
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
@@ -39,7 +40,7 @@ minimally the *name* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-6. Optionally enable custom extensions eg node and then rebuild Lando:
+7. Optionally enable custom extensions eg node and then rebuild Lando:
    ```
    lando load-wunderio-lando-drupal-extensions node
    lando rebuild
