@@ -1,6 +1,7 @@
 # Elasticsearch extension
 
-This extension adds Elasticsearch 7.17.0 to the Lando configuration.
+This extension adds latest supported Elasticsearch 8.11.0 to the Lando configuration. This
+is a rolling release so if 8.11.x or 8.x gets EOL, then this will be updated to next version.
 
 ## Installation
 
@@ -40,4 +41,4 @@ This extension adds Elasticsearch 7.17.0 to the Lando configuration.
 
 **Services:**
 
-- **elasticsearch:** Configuration for Elasticsearch 7.17.0.
+- **elasticsearch:** Configuration for Elasticsearch 8.11.0.

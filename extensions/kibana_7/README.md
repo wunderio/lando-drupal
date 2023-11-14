@@ -1,7 +1,6 @@
 # Kibana extension
 
-This extension adds latest supported Kibana 8.11.0 to the Lando configuration. This
-is a rolling release so if 8.11.x or 8.x gets EOL, then this will be updated to next version.
+This extension adds Kibana 7.17.0 to the Lando configuration.
 
 ## Installation
 
@@ -41,4 +40,4 @@ is a rolling release so if 8.11.x or 8.x gets EOL, then this will be updated to 
 
 **Services:**
 
-- **kibana:** Configuration for Kibana 8.11.0.
+- **kibana:** Configuration for Kibana 7.17.0.
