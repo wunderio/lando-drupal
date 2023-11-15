@@ -14,18 +14,13 @@ minimally the *name* and *recipe* parameter.
    composer require wunderio/lando-drupal --dev
    ```
 
-4. Add these into the main project's `.gitignore`:
-   ```
-   # wunderio/lando-drupal
-   .lando.base.yml
-   .lando/core/
-   ```
-
 5. Add changes to GIT:
    ```
+   git add .lando/core/ &&
    git add .lando/custom/ &&
    git add drush/sites/ &&
-   git add -p .gitignore composer.json composer.lock
+   git add .lando.base.yml &&
+   git add -p composer.json composer.lock
    ```
 
 6. Depending on your project either create or update your .lando.yml.
