@@ -8,13 +8,13 @@ minimally the *name* and *recipe* parameter.
 
 1. Move your current .lando/* files to .lando/custom/. Next step will add new .lando/core/ folder.
 
-3. Install the composer package:
+2. Install the composer package:
 
    ```
    composer require wunderio/lando-drupal --dev
    ```
 
-5. Add changes to GIT:
+3. Add changes to GIT:
    ```
    git add .lando/core/ &&
    git add .lando/custom/ &&
@@ -23,7 +23,7 @@ minimally the *name* and *recipe* parameter.
    git add -p composer.json composer.lock
    ```
 
-6. Depending on your project either create or update your .lando.yml.
+4. Depending on your project either create or update your .lando.yml.
 
    If you are creating new project, then you need to create .lando.yml file with the following:
    ```
@@ -35,7 +35,7 @@ minimally the *name* and *recipe* parameter.
    .lando.base.yml. If you have any custom code in .lando/ then move these to
    .lando/custom/ folder and change the references in .lando.yml
 
-7. Optionally enable custom extensions eg node and then rebuild Lando:
+5. Optionally enable custom extensions eg node and then rebuild Lando:
    ```
    lando load-wunderio-lando-drupal-extensions node
    lando rebuild
