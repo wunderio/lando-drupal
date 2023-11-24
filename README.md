@@ -43,6 +43,34 @@ minimally the *name* and *recipe* parameter.
 
    All available extensions are listed at https://github.com/wunderio/lando-drupal/tree/main/extensions
 
+6. We need to migrate build steps due to the inability to overwrite them from .lando.yml. For instance, in
+   the current setup in .lando.base.yml file we have this:
+
+   ```
+   services:
+     appserver:
+       build:
+         - "/app/.lando/core/_run-scripts.sh services-appserver-build.sh"
+   ```
+
+   The above executes services-appserver-build.sh script from .lando/core/ folder, and it runs *composer install*.
+
+   If now in your .lando.yml you have also *composer install* in the same build step, then this is also executed.
+   Basically Lando stacks the commands in build steps.
+
+   ```
+   services:
+     appserver:
+      build:
+        - "composer install"
+   ```
+
+   To resolve this issue, the recommended approach is to remove the build step from .lando.yml. Instead, copy the
+   .lando/core/services-appserver-build.sh file to your .lando/custom/ folder.
+   Then, customize it to suit your preferences. The line in .lando.base.yml -
+   '/app/.lando/core/_run-scripts.sh services-appserver-build.sh' - will first check for the presence of
+   services-appserver-build.sh in the .lando/custom/ folder. If it's not found, it will execute it from .lando/core/."
+
 ## Overview
 
 **Configuration Overview:**

@@ -56,12 +56,15 @@ services:
     run_as_root:
       - "/app/.lando/core/_run-scripts.sh services-adminer-run-as-root.sh"
   appserver:
+    build_as_root:
+      - "/app/.lando/core/_run-scripts.sh services-appserver-build-as-root.sh"
     # Install dependencies when building lando.
     build:
       - "/app/.lando/core/_run-scripts.sh services-appserver-build.sh"
     run_as_root:
-      - ln -snf /usr/share/zoneinfo/Europe/Helsinki /etc/localtime
-      - echo "Europe/Helsinki" > /etc/timezone
+      - "/app/.lando/core/_run-scripts.sh services-appserver-run-as-root.sh"
+    run:
+      - "/app/.lando/core/_run-scripts.sh services-appserver-run.sh"
     # Uncomment this if you need to edit files inside the container
     #build_as_root:
     #  - apt update -y
