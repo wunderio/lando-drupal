@@ -46,6 +46,12 @@ tooling:
     description: "Helper to remove extension under wunderio:extensions: in your .lando.yml. You need 'lando rebuild' for the changes to take affect."
     cmd:
       - appserver: "/app/vendor/wunderio/lando-drupal/scripts/unload_extensions.sh"
+  snapshot:
+    service: database
+    description: Create a snapshot of the database.
+    cmd:
+      - database: /app/.lando/core/tooling-snapshot.sh
+    user: root
 
 services:
   adminer:

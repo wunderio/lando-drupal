@@ -1,0 +1,242 @@
+#!/bin/bash
+
+#
+# Helper script to create db snapshots with mariabackup.
+#
+
+set -eo pipefail
+
+# Path to snapshots directory.
+db_snapshots_base_dir="/app/.lando/db_snapshots"
+
+# Initialize variables
+snapshot_name=""
+restore_snapshot_name=""
+create_snapshot=false
+restore_latest=false
+
+# Check the command-line parameters
+if [[ "$1" == "restore" ]]; then
+    if [[ -n "$2" && ! "$2" =~ ^-+ ]]; then
+        restore_snapshot_name="$2"
+    else
+        restore_latest=true
+    fi
+else
+    create_snapshot=true
+
+    # check if the '--name' parameter is passed and capture its value
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            --name)
+                snapshot_name="$2"
+                shift
+                ;;
+            *) ;;
+        esac
+        shift
+    done
+fi
+
+#echo $restore_snapshot_name
+
+# while [[ "$#" -gt 0 ]]; do
+#     echo $1
+#     case $1 in
+#         restore)
+#             if [[ -n "$2" && ! "$2" =~ ^-+ ]]; then
+#                 restore_snapshot="$2"
+#                 shift
+#             else
+#                 restore_latest=true
+#             fi
+#             ;;
+#         *) 
+#             echo "ELSE"
+#             create_snapshot=true ;;
+#     esac
+#     shift
+# done
+
+#
+# Function to generate a snapshot name based on the provided name or timestamp.
+#
+function generate_complete_snapshot_name() {
+  local snapshot_name=$1
+
+  # Retrieve MariaDB version
+  local mariadb_version=$(mysql --version | awk '{print $5}')
+
+  # Extract major and minor version from the full version string
+  # Example output: 10.3
+  local mariadb_major_minor=$(echo "$mariadb_version" | cut -d'.' -f1,2)
+
+  # Generate a timestamp-based snapshot name
+  local drupal_short=$(echo "$DB_NAME_DRUPAL" | sed 's/drupal/d/')
+  local complete_snapshot_name=$drupal_short"_"$snapshot_name"-mariadb_$mariadb_major_minor"
+  echo "$complete_snapshot_name"
+}
+
+#
+# Function to create a snapshot with the provided name.
+#
+function create_snapshot() {
+  local snapshot_name=$1
+  echo "Creating snapshot..."
+
+  local db_snapshots_dir="$db_snapshots_base_dir/$snapshot_name"
+  mkdir -p "$db_snapshots_dir"
+
+  mariabackup --backup --target-dir=$db_snapshots_dir --host=$DB_HOST_DRUPAL --user=root --password=
+}
+
+function stop_db() {
+  # Restart the db master process.
+  mysqld_pid=$(pgrep -o mysqld)
+  if [ -n "$mysqld_pid" ]; then
+    # Send USR2 signal to stop mysqld.
+    if kill -USR2 "$mysqld_pid"; then
+      echo "Mysqld process (PID $mysqld_pid) stopped."
+    else
+      echo "Failed to stop mysqld process."
+      exit 1
+    fi
+  else
+    echo "Mysqld process not found."
+    exit 1
+  fi
+}
+
+#
+# Function to create a snapshot with the provided name.
+#
+function restore_snapshot() {
+  local snapshot_name=$1
+  echo "Restoring snapshot..."
+
+  local db_snapshots_dir="$db_snapshots_base_dir/$snapshot_name"
+
+  stop_db
+
+  mariabackup --prepare --target-dir=$db_snapshots_dir --host=$DB_HOST_DRUPAL --user=root --password=
+
+  #mv /bitnami/mariadb/data/ /bitnami/mariadb/data_backup/
+  rm -rf /bitnami/mariadb/data/
+  cp -rfv $db_snapshots_dir /bitnami/mariadb/data/
+  chown -R 1001:root  /bitnami/mariadb/data
+  find /bitnami/mariadb/data/ -type f -exec chmod 660 {} \;
+
+  # Start db again.
+  #services mysql start
+}
+
+#
+# Create a snapshot with the provided name or timestamp (if name is not defined).
+#
+if [ "$create_snapshot" = true ]; then
+    if [ -n "$snapshot_name" ]; then
+        complete_snapshot_name=$(generate_complete_snapshot_name "$snapshot_name")
+        create_snapshot $complete_snapshot_name
+        # Add mariabackup command or any snapshot creation logic here
+    else
+        timestamp=$(date +"%Y%m%d%H%M%S")
+        complete_snapshot_name=$(generate_complete_snapshot_name "$timestamp")
+        create_snapshot $complete_snapshot_name
+        # Add mariabackup command or any snapshot creation logic here
+    fi
+fi
+
+#
+# Restore a snapshot.
+#
+if [ -n "$restore_snapshot_name" ]; then
+    echo "Restoring snapshot: $restore_snapshot_name"
+    #echo $snapshot_name
+    complete_snapshot_name=$(generate_complete_snapshot_name "$restore_snapshot_name")
+    restore_snapshot $complete_snapshot_name
+elif [ "$restore_latest" = true ]; then
+    echo "Restoring the latest snapshot"
+    # Add restore latest logic here
+fi
+
+# # Get the provided name from the command line
+# snapshot_name=""
+# is_restore=false
+# restore_snapshot=""
+
+# # Check if the '--name' parameter is passed and capture its value
+# while [[ "$#" -gt 0 ]]; do
+#     case $1 in
+#         --name) snapshot_name="$2"; shift ;;
+#         restore) is_restore=true ;;
+#         *) 
+#             if [ "$is_restore" = true ]; then
+#                 restore_snapshot="$1"
+#             fi
+#             ;;
+#     esac
+#     shift
+# done
+
+# if [ "$restore_snapshot" != "" ]; then
+#     echo "Restore process initiated for snapshot: $restore_snapshot"
+#     # Add your restore logic here, using $restore_snapshot variable
+# else
+#     echo "Create a new snapshot"
+# fi
+
+# exit
+
+
+# # Check if the '--name' parameter is passed and capture its value
+# while [[ "$#" -gt 0 ]]; do
+#     case $1 in
+#         --name) snapshot_name="$2"; shift ;;
+#         *) ;;
+#     esac
+#     shift
+# done
+
+# action=""
+
+# # Check if the '--action' parameter is passed and capture its value
+# while [[ "$#" -gt 0 ]]; do
+#     case $1 in
+#         --action) action="$2"; shift ;;
+#         *) ;;
+#     esac
+#     shift
+# done
+
+# # Retrieve MariaDB version
+# mariadb_version=$(mysql --version | awk '{print $5}')
+
+# # Extract major and minor version from the full version string
+# # Example output: 10.3
+# mariadb_major_minor=$(echo "$mariadb_version" | cut -d'.' -f1,2)
+
+# if (action == "restore"); then
+#     echo "Restore the latest snapshot"
+
+# # # Restore the latest snapshot
+# # mariabackup --prepare --target-dir=$db_snapshots_dir
+# # mariabackup --copy-back --target-dir=$db_snapshots_dir
+# # chown -R mysql:mysql /var/lib/mysql
+# # service mysql restart
+#   exit 0
+# fi
+
+# if [ -z "$snapshot_name" ]; then
+#     # Generate a timestamp for the snapshot name
+#     timestamp=$(date +"%Y%m%d%H%M%S")
+    
+#     # Use the DB_NAME_DRUPAL and timestamp to create the snapshot name
+#     snapshot_name="$timestamp"
+# fi
+
+# # Create a subfolder based on the provided name and MariaDB version.
+# drupal_short=$(echo "$DB_NAME_DRUPAL" | sed 's/drupal/d/')
+# db_snapshots_dir="$db_snapshots_base_dir/"$drupal_short"_$snapshot_name-mariadb_$mariadb_major_minor"
+# mkdir -p "$db_snapshots_dir"
+
+# mariabackup --backup --target-dir=$db_snapshots_dir --host=$DB_HOST_DRUPAL --user=root --password=
