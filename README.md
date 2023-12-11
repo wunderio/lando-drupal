@@ -6,7 +6,7 @@ minimally the *name* and *recipe* parameter.
 
 ## Installation
 
-1. Move your current .lando/* files to .lando/custom/. Next step will add new .lando/core/ folder.
+1. Move your current .lando/* files to .lando/custom/ and change the references in .lando.yml. Next step will add new .lando/core/ folder.
 
 2. Install the composer package:
 
@@ -32,8 +32,7 @@ minimally the *name* and *recipe* parameter.
    ```
 
    In case you already had .lando.yml then remove anything that already exists in
-   .lando.base.yml. If you have any custom code in .lando/ then move these to
-   .lando/custom/ folder and change the references in .lando.yml
+   .lando.base.yml.
 
 5. Optionally enable custom extensions eg node and then rebuild Lando:
    ```
