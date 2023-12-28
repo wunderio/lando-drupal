@@ -90,9 +90,12 @@ services:
     services:
       image: drupalci/webdriver-chromedriver:production
       command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
+  database:
+    build_as_root:
+      - apt update -y
+      - apt-get install liblz4-tool -y
   # Use random static high port for database connection.
   # @see: https://docs.lando.dev/guides/external-access.html
-  # database:
   #   portforward: 34567
   mailhog:
     type: mailhog

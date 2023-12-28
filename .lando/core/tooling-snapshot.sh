@@ -51,7 +51,7 @@ fi
 #                 restore_latest=true
 #             fi
 #             ;;
-#         *) 
+#         *)
 #             echo "ELSE"
 #             create_snapshot=true ;;
 #     esac
@@ -78,16 +78,40 @@ function generate_complete_snapshot_name() {
 }
 
 #
+# Function to generate a sanitized snapshot name based on the provided name.
+#
+function sanitize_snapshot_name() {
+  local snapshot_name=$1
+  local sanitized_snapshot_name="${snapshot_name//\//__}"
+  echo "$sanitized_snapshot_name"
+}
+
+#
 # Function to create a snapshot with the provided name.
 #
 function create_snapshot() {
   local snapshot_name=$1
   echo "Creating snapshot..."
 
-  local db_snapshots_dir="$db_snapshots_base_dir/$snapshot_name"
+  local sanitized_snapshot_name=$(sanitize_snapshot_name "$snapshot_name")
+  local db_snapshots_dir="$db_snapshots_base_dir/$sanitized_snapshot_name"
   mkdir -p "$db_snapshots_dir"
 
   mariabackup --backup --target-dir=$db_snapshots_dir --host=$DB_HOST_DRUPAL --user=root --password=
+
+  # Compress the snapshot directory with lz4 - very fast and effective compression.
+  # Eg of compression: 3.8G -> 365M. Total with above mariabackup and lz4: 13 seconds.
+  # Compared to tar czf "$db_snapshots_dir.tar.gz" "$db_snapshots_dir"
+  # takes 41 seconds to 1m 12 seconds.
+  #apt-get install liblz4
+  cd "$db_snapshots_base_dir"
+  tar cf - "$sanitized_snapshot_name" | lz4 > "$sanitized_snapshot_name.tar.lz4"
+  rm -rf "$db_snapshots_dir"
+
+  # Change ownership of the snapshot directory from root to www-data as
+  # otherwise it's not readable in host.
+  chown www-data:www-data "$db_snapshots_base_dir"
+  chown -R www-data:www-data "$db_snapshots_dir"
 }
 
 function stop_db() {
@@ -114,20 +138,34 @@ function restore_snapshot() {
   local snapshot_name=$1
   echo "Restoring snapshot..."
 
-  local db_snapshots_dir="$db_snapshots_base_dir/$snapshot_name"
+  cd $db_snapshots_base_dir
 
-  stop_db
+  local sanitized_snapshot_name=$(sanitize_snapshot_name "$snapshot_name")
+  # @todo Remove db_snapshots_dir as it's not used anymore?
+  # local db_snapshots_dir="$db_snapshots_base_dir/$sanitized_snapshot_name"
 
-  mariabackup --prepare --target-dir=$db_snapshots_dir --host=$DB_HOST_DRUPAL --user=root --password=
+  # Extract the snapshot directory from the compressed file.
+  lz4 -d < "$sanitized_snapshot_name.tar.lz4" | tar xf -
 
-  #mv /bitnami/mariadb/data/ /bitnami/mariadb/data_backup/
+  # Ideally we should be stopping the db before restoring the snapshot, but this
+  # messes up with the Lando db container. I think stopping is needed only when
+  # working with the db on the host. In local we're not doing that.
+  # stop_db
+
+  mariabackup --prepare --target-dir=$sanitized_snapshot_name --host=$DB_HOST_DRUPAL --user=root --password=
+
+  # @todo Remove this as it's not used anymore? Do we need backups?
+  # mv /bitnami/mariadb/data/ /bitnami/mariadb/data_backup/
   rm -rf /bitnami/mariadb/data/
-  cp -rfv $db_snapshots_dir /bitnami/mariadb/data/
+  cp -rfv $sanitized_snapshot_name /bitnami/mariadb/data/ && rm -rf "$sanitized_snapshot_name"
   chown -R 1001:root  /bitnami/mariadb/data
   find /bitnami/mariadb/data/ -type f -exec chmod 660 {} \;
 
-  # Start db again.
+  # @todo Start db again automatically, for now let's just echo the command.
   #services mysql start
+  # For now, echo colored message to restart database
+  echo -e "\e[1;33mPlease manually restart Lando to apply changes. Execute this in console:\e[0m"
+  echo -e "\e[1;33mlando restart\e[0m"
 }
 
 #
@@ -169,7 +207,7 @@ fi
 #     case $1 in
 #         --name) snapshot_name="$2"; shift ;;
 #         restore) is_restore=true ;;
-#         *) 
+#         *)
 #             if [ "$is_restore" = true ]; then
 #                 restore_snapshot="$1"
 #             fi
@@ -229,7 +267,7 @@ fi
 # if [ -z "$snapshot_name" ]; then
 #     # Generate a timestamp for the snapshot name
 #     timestamp=$(date +"%Y%m%d%H%M%S")
-    
+
 #     # Use the DB_NAME_DRUPAL and timestamp to create the snapshot name
 #     snapshot_name="$timestamp"
 # fi
