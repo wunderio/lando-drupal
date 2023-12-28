@@ -132,7 +132,7 @@ function stop_db() {
 }
 
 #
-# Function to create a snapshot with the provided name.
+# Function to restore a snapshot with the provided name.
 #
 function restore_snapshot() {
   local snapshot_name=$1
