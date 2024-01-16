@@ -91,7 +91,6 @@ function create_snapshot() {
   # Change ownership of the snapshot directory from root to www-data as
   # otherwise it's not readable in host.
   chown www-data:www-data "$db_snapshots_base_dir"
-  chown -R www-data:www-data "$db_snapshots_dir"
 }
 
 function stop_db() {
