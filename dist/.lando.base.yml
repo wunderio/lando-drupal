@@ -1,5 +1,5 @@
 name: drupal-project
-
+#
 config:
   php: "8.1"
   via: nginx
@@ -10,7 +10,7 @@ config:
   config:
     php: .lando/core/php.ini
     database: .lando/core/my.cnf
-
+#
 tooling:
   composer:
     description: "Runs Composer commands"
@@ -52,7 +52,7 @@ tooling:
     cmd:
       - database: /app/.lando/core/tooling-snapshot.sh
     user: root
-
+#
 services:
   adminer:
     type: compose
@@ -112,7 +112,7 @@ services:
   #     environment:
   #       ADMIN_PORT: ":6082"
   #       VARNISH_ALLOW_UNRESTRICTED_PURGE: "true"
-
+#
 proxy:
   adminer:
     - adminer.drupal-project.lndo.site
@@ -120,16 +120,16 @@ proxy:
     - mail.lndo.site
   # varnish:
   #   - varnish.drupal-project.lndo.site
-
+#
 events:
   post-db-import:
     - appserver: "cd $LANDO_WEBROOT && drush cache:rebuild -y && drush @local user:login"
   pre-rebuild:
     - appserver: "SCRIPT=/app/vendor/wunderio/lando-drupal/scripts/load_extensions.sh && [ -f \"$SCRIPT\" ] && bash \"$SCRIPT\" || true"
-
+#
 env_file:
   - .lando/core/.env
   - .lando/custom/.env
-
+#
 # Tested with Lando version
 version: v3.18.0
