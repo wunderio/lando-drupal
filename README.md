@@ -156,3 +156,27 @@ Currently, there are 2 script:
 - Custom events are defined to perform actions after a database import.
 - The configuration is tested with Lando version 3.18.0.
 - Please make sure to adjust any paths or configurations as needed for your specific project and environment.
+
+## Experimental
+
+### Snapshot tool
+
+Based on [DDEV snapshot tool](https://ddev.readthedocs.io/en/latest/users/usage/commands/#snapshot), we've added experimental tool also here. It's by far not
+so complete tooling as in DDEV. Hopefully this will get to Lando officially one day -
+we've created issue at https://github.com/lando/mariadb/issues/37
+
+
+Create named snapshot:
+```bash
+lando snapshot --name foobar
+```
+Or create snapshot with timestamp:
+```bash
+lando snapshot
+```
+
+Restore the snapshot named foobar
+```bash
+lando snapshot restore foobar
+lando restart
+```
