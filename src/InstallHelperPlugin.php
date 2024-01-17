@@ -135,22 +135,17 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
   }
 
   /**
-   * Copy the .lando.base.yml file and the .lando/core directory to the project.
+   * Copy the .lando.base.yml file and the dist/ directory contents to the project.
    */
   private function deployLandoFiles(): void {
-    // Copy over the .lando/core directory.
-    $src_core = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando/core';
-    $dest_core = "{$this->projectDir}/.lando/core";
-    self::rcopy($src_core, $dest_core);
+    // Copy contents of dist folder to project.
+    $distDir = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/dist';
+    $destDir = "{$this->projectDir}";
+    self::rcopy($distDir, $destDir);
 
-    // Copy over the .lando.base.yml file.
-    $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando.base.yml';
-    self::copy($src_base, $this->projectDir);
-
-    // Copy over the Drush aliases file.
-    $src_drush_aliases = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/drush/sites';
-    $dest_drush_aliases = "{$this->projectDir}/drush/sites";
-    self::rcopy($src_drush_aliases, $dest_drush_aliases);
+    // // Copy over the .lando.base.yml file.
+    // $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando.base.yml';
+    // self::copy($src_base, $this->projectDir);
   }
 
   /**
