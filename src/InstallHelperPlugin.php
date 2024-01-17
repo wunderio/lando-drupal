@@ -142,10 +142,6 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
     $distDir = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/dist';
     $destDir = "{$this->projectDir}";
     self::rcopy($distDir, $destDir);
-
-    // // Copy over the .lando.base.yml file.
-    // $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando.base.yml';
-    // self::copy($src_base, $this->projectDir);
   }
 
   /**
