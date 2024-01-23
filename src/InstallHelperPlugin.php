@@ -135,22 +135,68 @@ class InstallHelperPlugin implements PluginInterface, EventSubscriberInterface {
   }
 
   /**
-   * Copy the .lando.base.yml file and the .lando/core directory to the project.
+   * Copy the .lando.base.yml file and the dist/ directory contents to the project.
    */
   private function deployLandoFiles(): void {
-    // Copy over the .lando/core directory.
-    $src_core = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando/core';
-    $dest_core = "{$this->projectDir}/.lando/core";
-    self::rcopy($src_core, $dest_core);
+    $dest_dir = "{$this->projectDir}";
 
-    // Copy over the .lando.base.yml file.
-    $src_base = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/.lando.base.yml';
-    self::copy($src_base, $this->projectDir);
+    // Clean up old files from project root so we can deploy file removal.
+    // This is not ideal solution as we need to keep track of files to delete -
+    // basically this should cover everything that is in the dist/ directory.
+    $paths_to_delete = [
+      '.lando/.gitignore',
+      '.lando/core/',
+      '.lando/custom/.gitignore',
+      'drush/sites/local.site.yml',
+    ];
+    foreach($paths_to_delete as $path) {
+      $full_delete_path = "{$dest_dir}/$path";
 
-    // Copy over the Drush aliases file.
-    $src_drush_aliases = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/drush/sites';
-    $dest_drush_aliases = "{$this->projectDir}/drush/sites";
-    self::rcopy($src_drush_aliases, $dest_drush_aliases);
+      if (is_file($full_delete_path)) {
+        unlink($full_delete_path);
+      }
+      elseif (is_dir($full_delete_path)) {
+        self::rDelete($full_delete_path);
+      }
+      else {
+        $this->io->write("The path is neither a file nor a directory. Can't delete: {$full_delete_path}");
+      }
+    }
+
+    // Copy contents of dist folder to project.
+    $dist_dir = "{$this->vendorDir}/" . self::PACKAGE_NAME . '/dist';
+    self::rcopy($dist_dir, $dest_dir);
+  }
+
+  /**
+   * Recursively delete a directory and its contents.
+   *
+   * @param string $dir
+   *   Directory to be deleted.
+   *
+   * @return bool
+   *   TRUE if directory deletion was successful, FALSE otherwise.
+   */
+  private static function rDelete($dir): bool {
+    if (!is_dir($dir)) {
+      echo "Directory does not exist";
+      return FALSE;
+    }
+
+    $files = array_diff(scandir($dir), array('.', '..'));
+
+    foreach ($files as $file) {
+      $path = $dir . '/' . $file;
+
+      if (is_dir($path)) {
+        self::rDelete($path);
+      }
+      else {
+        unlink($path);
+      }
+    }
+
+    return rmdir($dir);
   }
 
   /**
